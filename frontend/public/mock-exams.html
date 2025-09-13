@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Prep Website - Mock Exams</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-purple: #7B61FF;
+            --light-purple: #E6E0FF;
+            --dark-purple: #5A47D4;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --text-light: #666;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: var(--primary-purple);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .nav-item a.active {
+            background: linear-gradient(to right, var(--primary-purple)10%, rgba(255,255,255,0));
+            color: var(--primary-purple);
+            border-left: 5px solid var(--primary-purple);
+        }
+
+        .nav-item a:hover:not(.active) {
+            background-color: var(--bg-light);
+            color: var(--primary-purple);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .study-streak {
+            background-color: var(--bg-light);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .study-streak h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .study-streak p {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-purple);
+            border-radius: 5px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 20px 30px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 15px 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 0.95em;
+        }
+
+        .search-bar i {
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icons .icon-btn {
+            background-color: var(--bg-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-left: 15px;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .nav-icons .icon-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .nav-icons .icon-btn .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #FF4D4F;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7em;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            margin-left: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Mock Exams Styles */
+        .page-header {
+            margin-bottom: 20px;
+        }
+        .page-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        .page-header p {
+            font-size: 1em;
+            color: var(--text-light);
+        }
+        .mock-exams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .mock-exam-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .mock-exam-header {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .mock-exam-meta {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        .mock-exam-meta .tag {
+            font-weight: 600;
+        }
+        .test-info {
+            font-size: 0.9em;
+            color: var(--text-dark);
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+        .test-info span {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        .mock-exam-actions {
+            display: flex;
+            justify-content: flex-start;
+        }
+        .mock-exam-actions button {
+            background-color: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .mock-exam-actions button i {
+            margin-right: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .mock-exams-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; align-items: center; }
+            .sidebar .logo, .sidebar .study-streak, .nav-item a span { display: none; }
+            .sidebar .nav-item a { justify-content: center; }
+            .sidebar .nav-item a.active { border-left: 5px solid var(--primary-purple); }
+            .main-content { margin-left: 80px; padding: 15px; }
+            .navbar .search-bar { width: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-wrap: wrap; justify-content: center; }
+            .navbar .search-bar { order: 2; margin-top: 15px; width: 100%; }
+            .navbar .nav-icons { order: 1; margin-bottom: 15px; }
+            .main-content { padding: 10px; }
+            .mock-exams-grid { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .main-content { margin-left: 0; }
+            .navbar .search-bar { margin: 0; border-radius: 0; }
+            body { padding-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">TestSage</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="subjects.html"><i class="fas fa-book"></i><span>Subjects & PYQs</span></a></li>
+            <li class="nav-item"><a href="mock-exams.html" class="active"><i class="fas fa-pencil-alt"></i><span>Mock Exams</span></a></li>
+            <li class="nav-item"><a href="analytics.html"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+            <li class="nav-item"><a href="discussion.html"><i class="fas fa-comments"></i><span>Discussion</span></a></li>
+            <li class="nav-item"><a href="job-portal.html"><i class="fas fa-briefcase"></i><span>Job Portal</span></a></li>
+        </ul>
+        <div class="study-streak">
+            <h4>Study Streak</h4>
+            <p>Keep it going!</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 70%;"></div>
+            </div>
+            <p style="margin-top: 8px;">7 days streak</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search subjects, questions, jobs...">
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                <button class="icon-btn"><i class="fas fa-bookmark"></i><span class="badge">4</span></button>
+                <div class="profile-pic">
+                    <img src="https://via.placeholder.com/40" alt="User Profile">
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2>Mock Examinations</h2>
+            <p>Choose from our comprehensive mock test series</p>
+        </div>
+        <div class="mock-exams-grid">
+            <div class="mock-exam-card">
+                <h3 class="mock-exam-header">JEE Main Full Test</h3>
+                <p class="mock-exam-meta"><span class="tag" style="background-color: #EBF4FE; color: #007bff; padding: 2px 8px; border-radius: 5px; font-weight: 500;">Medium</span> • 15234 attempts</p>
+                <div class="test-info">
+                    <p><span>Duration:</span> 3 hours</p>
+                    <p><span>Questions:</span> 90</p>
+                    <p><span>Subjects:</span> Physics, Chemistry, Mathematics</p>
+                </div>
+                <div class="mock-exam-actions">
+                    <button><i class="fas fa-play-circle"></i> Start Test</button>
+                </div>
+            </div>
+            <div class="mock-exam-card">
+                <h3 class="mock-exam-header">NEET Practice Test</h3>
+                <p class="mock-exam-meta"><span class="tag" style="background-color: #FEECEB; color: #D9534F; padding: 2px 8px; border-radius: 5px; font-weight: 500;">Hard</span> • 12456 attempts</p>
+                <div class="test-info">
+                    <p><span>Duration:</span> 3 hours</p>
+                    <p><span>Questions:</span> 180</p>
+                    <p><span>Subjects:</span> Physics, Chemistry, Biology</p>
+                </div>
+                <div class="mock-exam-actions">
+                    <button><i class="fas fa-play-circle"></i> Start Test</button>
+                </div>
+            </div>
+            <div class="mock-exam-card">
+                <h3 class="mock-exam-header">Quick Physics Test</h3>
+                <p class="mock-exam-meta"><span class="tag" style="background-color: #E6F7EB; color: #28a745; padding: 2px 8px; border-radius: 5px; font-weight: 500;">Easy</span> • 8932 attempts</p>
+                <div class="test-info">
+                    <p><span>Duration:</span> 1 hour</p>
+                    <p><span>Questions:</span> 30</p>
+                    <p><span>Subjects:</span> Physics</p>
+                </div>
+                <div class="mock-exam-actions">
+                    <button><i class="fas fa-play-circle"></i> Start Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

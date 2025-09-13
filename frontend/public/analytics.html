@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Prep Website - Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-purple: #7B61FF;
+            --light-purple: #E6E0FF;
+            --dark-purple: #5A47D4;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --text-light: #666;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: var(--primary-purple);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .nav-item a.active {
+            background: linear-gradient(to right, var(--primary-purple)10%, rgba(255,255,255,0));
+            color: var(--primary-purple);
+            border-left: 5px solid var(--primary-purple);
+        }
+
+        .nav-item a:hover:not(.active) {
+            background-color: var(--bg-light);
+            color: var(--primary-purple);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .study-streak {
+            background-color: var(--bg-light);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .study-streak h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .study-streak p {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-purple);
+            border-radius: 5px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 20px 30px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 15px 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 0.95em;
+        }
+
+        .search-bar i {
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icons .icon-btn {
+            background-color: var(--bg-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-left: 15px;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .nav-icons .icon-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .nav-icons .icon-btn .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #FF4D4F;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7em;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            margin-left: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Analytics Section Styles */
+        .page-header {
+            margin-bottom: 20px;
+        }
+        .page-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        .page-header p {
+            font-size: 1em;
+            color: var(--text-light);
+        }
+        .analytics-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .analytics-stat-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .analytics-stat-card .title {
+            font-size: 0.9em;
+            color: var(--text-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .analytics-stat-card .value {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin: 5px 0 0;
+            display: flex;
+            align-items: center;
+        }
+        .analytics-stat-card .value .change {
+            font-size: 0.6em;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        .analytics-stat-card.blue { background-color: #EBF4FE; }
+        .analytics-stat-card.green { background-color: #E6F7EB; }
+        .analytics-stat-card.purple-light { background-color: #E6E0FF; }
+        .analytics-stat-card.orange { background-color: #FFC0B4; }
+
+        .analytics-stat-card .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: white;
+        }
+        .analytics-stat-card.blue .icon-box { background-color: #007bff; }
+        .analytics-stat-card.green .icon-box { background-color: #28a745; }
+        .analytics-stat-card.purple-light .icon-box { background-color: #7B61FF; }
+        .analytics-stat-card.orange .icon-box { background-color: #FD7E14; }
+
+        .analytics-tab-content .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .chart-card h4 {
+            margin: 0 0 10px;
+            font-weight: 600;
+        }
+        .chart-card p {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-top: 0;
+        }
+        .progress-list .progress-item {
+            margin-bottom: 20px;
+        }
+        .progress-list .progress-item .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .progress-list .progress-item .bar-label .percentage {
+            font-weight: 600;
+        }
+        .progress-list .progress-item .bar-label .change {
+            font-size: 0.8em;
+            font-weight: 400;
+            margin-left: 10px;
+        }
+        .progress-list .progress-item .bar-label .change.up { color: #28a745; }
+        .progress-list .progress-item .bar-label .change.down { color: #D9534F; }
+
+        .progress-list .progress-bar-container {
+            height: 10px;
+        }
+        .progress-list .progress-bar {
+            background-color: var(--primary-purple);
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .pie-chart-container {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+        }
+        .toggle-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 5px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .toggle-tabs button {
+            background-color: transparent;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-light);
+        }
+        .toggle-tabs button.active {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            color: var(--primary-purple);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .analytics-stats-grid, .chart-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; align-items: center; }
+            .sidebar .logo, .sidebar .study-streak, .nav-item a span { display: none; }
+            .sidebar .nav-item a { justify-content: center; }
+            .sidebar .nav-item a.active { border-left: 5px solid var(--primary-purple); }
+            .main-content { margin-left: 80px; padding: 15px; }
+            .navbar .search-bar { width: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-wrap: wrap; justify-content: center; }
+            .navbar .search-bar { order: 2; margin-top: 15px; width: 100%; }
+            .navbar .nav-icons { order: 1; margin-bottom: 15px; }
+            .main-content { padding: 10px; }
+            .analytics-stats-grid, .chart-container { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .toggle-tabs { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .main-content { margin-left: 0; }
+            .navbar .search-bar { margin: 0; border-radius: 0; }
+            body { padding-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">TestSage</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="subjects.html"><i class="fas fa-book"></i><span>Subjects & PYQs</span></a></li>
+            <li class="nav-item"><a href="mock-exams.html"><i class="fas fa-pencil-alt"></i><span>Mock Exams</span></a></li>
+            <li class="nav-item"><a href="analytics.html" class="active"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+            <li class="nav-item"><a href="discussion.html"><i class="fas fa-comments"></i><span>Discussion</span></a></li>
+            <li class="nav-item"><a href="job-portal.html"><i class="fas fa-briefcase"></i><span>Job Portal</span></a></li>
+        </ul>
+        <div class="study-streak">
+            <h4>Study Streak</h4>
+            <p>Keep it going!</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 70%;"></div>
+            </div>
+            <p style="margin-top: 8px;">7 days streak</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search subjects, questions, jobs...">
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                <button class="icon-btn"><i class="fas fa-bookmark"></i><span class="badge">4</span></button>
+                <div class="profile-pic">
+                    <img src="https://via.placeholder.com/40" alt="User Profile">
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2>Performance Analytics</h2>
+            <p>Detailed insights into your exam preparation progress</p>
+        </div>
+        <div class="analytics-stats-grid">
+            <div class="analytics-stat-card" style="background-color: #EBF4FE;">
+                <div class="title">
+                    <span>Overall Score</span>
+                    <div style="background-color: #007bff;" class="icon-box"><i class="fas fa-bullseye"></i></div>
+                </div>
+                <div class="value">79%<span style="color: #28a745;" class="change">+5.2%</span></div>
+            </div>
+            <div class="analytics-stat-card" style="background-color: #E6F7EB;">
+                <div class="title">
+                    <span>Tests Taken</span>
+                    <div style="background-color: #28a745;" class="icon-box"><i class="fas fa-file-alt"></i></div>
+                </div>
+                <div class="value">45<span style="color: #28a745;" class="change">+3 this week</span></div>
+            </div>
+            <div class="analytics-stat-card" style="background-color: #E6E0FF;">
+                <div class="title">
+                    <span>Study Time</span>
+                    <div style="background-color: #7B61FF;" class="icon-box"><i class="fas fa-clock"></i></div>
+                </div>
+                <div class="value">95h<span style="color: #666;" class="change">This month</span></div>
+            </div>
+            <div class="analytics-stat-card" style="background-color: #FFC0B4;">
+                <div class="title">
+                    <span>Weak Areas</span>
+                    <div style="background-color: #FD7E14;" class="icon-box"><i class="fas fa-exclamation-triangle"></i></div>
+                </div>
+                <div class="value">4<span style="color: #666;" class="change">Need focus</span></div>
+            </div>
+        </div>
+
+        <div class="toggle-tabs">
+            <button class="analytics-tab-btn active" data-tab="performance">Performance</button>
+            <button class="analytics-tab-btn" data-tab="progress">Progress</button>
+            <button class="analytics-tab-btn" data-tab="weak-areas">Weak Areas</button>
+            <button class="analytics-tab-btn" data-tab="study-time">Study Time</button>
+        </div>
+
+        <div class="analytics-tab-content">
+            <div id="performance" class="analytics-tab-pane active" style="display: grid;">
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <h4>Subject-wise Performance</h4>
+                        <p>Current vs Previous performance comparison</p>
+                        <div style="height: 250px; display: flex; align-items: flex-end; justify-content: space-around; padding-bottom: 20px;">
+                            <div style="width: 15%; height: 85%; background-color: #007bff; border-radius: 5px; opacity: 0.8;"></div>
+                            <div style="width: 15%; height: 75%; background-color: #cccccc; border-radius: 5px;"></div>
+                            <div style="width: 15%; height: 70%; background-color: #007bff; border-radius: 5px; opacity: 0.8;"></div>
+                            <div style="width: 15%; height: 80%; background-color: #cccccc; border-radius: 5px;"></div>
+                            <div style="width: 15%; height: 90%; background-color: #007bff; border-radius: 5px; opacity: 0.8;"></div>
+                            <div style="width: 15%; height: 75%; background-color: #cccccc; border-radius: 5px;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-around; font-size: 0.9em; color: var(--text-light); margin-top: 10px;">
+                            <span>Physics</span>
+                            <span>Mathematics</span>
+                            <span>Biology</span>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h4>Physics Topic Analysis</h4>
+                        <p>Performance breakdown by topics</p>
+                        <div class="pie-chart-container">
+                            <canvas id="physicsPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="progress" class="analytics-tab-pane" style="display: none;">
+                <div class="chart-container">
+                    <div class="chart-card" style="grid-column: span 2;">
+                        <h4>Score Improvement Over Time</h4>
+                        <p>Your performance trend for the last 6 months</p>
+                        <div style="height: 250px;">
+                            <canvas id="scoreLineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="weak-areas" class="analytics-tab-pane" style="display: none;">
+                <div class="chart-card">
+                    <h4>Areas Needing Improvement</h4>
+                    <p>Focus on these topics to boost your overall performance</p>
+                    <div class="progress-list">
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Organic Chemistry <span style="font-size: 0.9em; color: var(--text-light);">Chemistry</span></span>
+                                <span class="percentage">45%<span style="color: #D9534F;" class="change">↓5%</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 45%; background-color: #D9534F;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Thermodynamics <span style="font-size: 0.9em; color: var(--text-light);">Physics</span></span>
+                                <span class="percentage">52%<span style="color: #28a745;" class="change">↑3%</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 52%; background-color: #FFC107;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Probability <span style="font-size: 0.9em; color: var(--text-light);">Mathematics</span></span>
+                                <span class="percentage">48%<span style="color: #D9534F;" class="change">↓2%</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 48%; background-color: #D9534F;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Genetics <span style="font-size: 0.9em; color: var(--text-light);">Biology</span></span>
+                                <span class="percentage">38%<span style="color: #D9534F;" class="change">↓8%</span></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 38%; background-color: #D9534F;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="study-time" class="analytics-tab-pane" style="display: none;">
+                <div class="chart-card">
+                    <h4>Study Time Analysis</h4>
+                    <p>Time spent vs target hours by subject</p>
+                    <div class="progress-list">
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Physics</span>
+                                <span>25h / 30h <i class="fas fa-exclamation-triangle" style="color: #FD7E14;"></i></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 83%; background-color: #FD7E14;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Chemistry</span>
+                                <span>20h / 25h <i class="fas fa-exclamation-triangle" style="color: #FD7E14;"></i></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 80%; background-color: #FD7E14;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Mathematics</span>
+                                <span>35h / 30h <i class="fas fa-check-circle" style="color: #28a745;"></i></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 100%; background-color: #28a745;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="bar-label">
+                                <span>Biology</span>
+                                <span>15h / 20h <i class="fas fa-exclamation-triangle" style="color: #FD7E14;"></i></span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 75%; background-color: #FD7E14;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.toggle-tabs .analytics-tab-btn');
+            const tabPanes = document.querySelectorAll('.analytics-tab-pane');
+
+            const showTab = (tabId) => {
+                tabPanes.forEach(pane => {
+                    if (pane.id === tabId) {
+                        pane.style.display = 'grid';
+                    } else {
+                        pane.style.display = 'none';
+                    }
+                });
+            };
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    showTab(this.getAttribute('data-tab'));
+                });
+            });
+
+            // Chart.js for Analytics Section
+            const scoreLineCtx = document.getElementById('scoreLineChart');
+            if (scoreLineCtx) {
+                new Chart(scoreLineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Score',
+                            data: [65, 70, 75, 78, 82, 85],
+                            borderColor: '#7B61FF',
+                            backgroundColor: 'rgba(123, 97, 255, 0.2)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+
+            const physicsPieCtx = document.getElementById('physicsPieChart');
+            if (physicsPieCtx) {
+                new Chart(physicsPieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Mechanics: 85%', 'Electricity: 90%', 'Thermodynamics: 72%', 'Waves: 68%'],
+                        datasets: [{
+                            data: [85, 90, 72, 68],
+                            backgroundColor: ['#007bff', '#6f42c1', '#28a745', '#fd7e14'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                align: 'center',
+                                labels: {
+                                    boxWidth: 15,
+                                    padding: 10
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Set initial tab
+            showTab('performance');
+        });
+    </script>
+</body>
+</html>

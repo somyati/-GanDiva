@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Prep Website - Job Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-purple: #7B61FF;
+            --light-purple: #E6E0FF;
+            --dark-purple: #5A47D4;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --text-light: #666;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: var(--primary-purple);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .nav-item a.active {
+            background: linear-gradient(to right, var(--primary-purple)10%, rgba(255,255,255,0));
+            color: var(--primary-purple);
+            border-left: 5px solid var(--primary-purple);
+        }
+
+        .nav-item a:hover:not(.active) {
+            background-color: var(--bg-light);
+            color: var(--primary-purple);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .study-streak {
+            background-color: var(--bg-light);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .study-streak h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .study-streak p {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-purple);
+            border-radius: 5px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 20px 30px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 15px 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 0.95em;
+        }
+
+        .search-bar i {
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icons .icon-btn {
+            background-color: var(--bg-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-left: 15px;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .nav-icons .icon-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .nav-icons .icon-btn .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #FF4D4F;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7em;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            margin-left: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Job Portal Styles */
+        .page-header {
+            margin-bottom: 20px;
+        }
+        .page-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        .page-header p {
+            font-size: 1em;
+            color: var(--text-light);
+        }
+        .job-portal-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .job-portal-tabs button {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-light);
+        }
+        .job-portal-tabs button.active {
+            background-color: var(--primary-purple);
+            color: white;
+        }
+        
+        /* Job Listings Styles */
+        .job-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .job-search-bar input, .job-search-bar .filter-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 0.95em;
+            color: var(--text-dark);
+        }
+        .job-search-bar input {
+            flex-grow: 1;
+        }
+        .job-search-bar .filter-btn {
+            cursor: pointer;
+        }
+        .job-search-bar .location-input, .job-search-bar .experience-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .job-listings-banner {
+            background: linear-gradient(135deg, #7B61FF 0%, #5A47D4 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .job-listings-banner h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 0 0 10px;
+        }
+        .job-listings-banner .stats span {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+
+        /* Resume Builder Styles */
+        .resume-builder-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .resume-main {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .resume-progress {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .resume-progress h4 {
+            font-size: 1em;
+            margin: 0;
+        }
+        .resume-progress .progress-bar-container {
+            flex-grow: 1;
+        }
+        .resume-section-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .resume-section-card h4 {
+            margin: 0;
+        }
+        .resume-section-card .edit-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .resume-section-card .status-icon {
+            color: #28a745;
+            margin-right: 10px;
+        }
+        .resume-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .resume-actions button {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .resume-actions .preview-btn {
+            background-color: var(--text-dark);
+            color: white;
+        }
+        .resume-actions .download-btn {
+            background-color: transparent;
+            color: var(--text-dark);
+        }
+        .resume-actions .preview-btn:hover { background-color: #555; }
+        .resume-actions .download-btn:hover { background-color: var(--bg-light); }
+
+        .resume-template-options {
+            margin-top: 30px;
+        }
+        .resume-template-options h4 {
+            margin-bottom: 15px;
+        }
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+        .template-card {
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            cursor: pointer;
+        }
+        .template-card .template-img {
+            height: 100px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .resume-sidebar .sidebar-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .resume-sidebar .sidebar-card h4 {
+            margin-top: 0;
+        }
+        .resume-tips li {
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        .quick-actions-list button {
+            width: 100%;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: left;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .quick-actions-list button:hover {
+            background-color: var(--border-color);
+        }
+
+        /* My Applications Styles */
+        .applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .application-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .application-card .app-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8em;
+            margin-right: 15px;
+        }
+        .application-card .app-info {
+            flex-grow: 1;
+        }
+        .application-card .app-info h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .application-card .app-info p {
+            margin: 2px 0 0;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+        .application-card .app-status {
+            text-align: right;
+        }
+        .application-card .app-status .status-tag {
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        .application-card .app-status .status-tag.interview {
+            color: #007bff;
+            background-color: #EBF4FE;
+        }
+        .application-card .app-status .status-tag.review {
+            color: #FFC107;
+            background-color: #FFF3CD;
+        }
+        .application-card .app-status .status-tag.applied {
+            color: #6f42c1;
+            background-color: #E6E0FF;
+        }
+        .application-card .app-status .status-tag.rejected {
+            color: #D9534F;
+            background-color: #FEECEB;
+        }
+        .application-card .app-status .date {
+            font-size: 0.8em;
+            color: var(--text-light);
+            margin: 5px 0;
+        }
+        .application-card .view-btn {
+            background-color: var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            margin-left: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .resume-builder-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; align-items: center; }
+            .sidebar .logo, .sidebar .study-streak, .nav-item a span { display: none; }
+            .sidebar .nav-item a { justify-content: center; }
+            .sidebar .nav-item a.active { border-left: 5px solid var(--primary-purple); }
+            .main-content { margin-left: 80px; padding: 15px; }
+            .navbar .search-bar { width: 300px; }
+            .job-search-bar { flex-wrap: wrap; }
+            .job-portal-tabs { flex-wrap: wrap; }
+            .job-portal-tabs button { flex: none; width: 100%; margin-bottom: 5px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-wrap: wrap; justify-content: center; }
+            .navbar .search-bar { order: 2; margin-top: 15px; width: 100%; }
+            .navbar .nav-icons { order: 1; margin-bottom: 15px; }
+            .main-content { padding: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .main-content { margin-left: 0; }
+            .navbar .search-bar { margin: 0; border-radius: 0; }
+            body { padding-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">TestSage</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="subjects.html"><i class="fas fa-book"></i><span>Subjects & PYQs</span></a></li>
+            <li class="nav-item"><a href="mock-exams.html"><i class="fas fa-pencil-alt"></i><span>Mock Exams</span></a></li>
+            <li class="nav-item"><a href="analytics.html"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+            <li class="nav-item"><a href="discussion.html"><i class="fas fa-comments"></i><span>Discussion</span></a></li>
+            <li class="nav-item"><a href="job-portal.html" class="active"><i class="fas fa-briefcase"></i><span>Job Portal</span></a></li>
+        </ul>
+        <div class="study-streak">
+            <h4>Study Streak</h4>
+            <p>Keep it going!</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 70%;"></div>
+            </div>
+            <p style="margin-top: 8px;">7 days streak</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search subjects, questions, jobs...">
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                <button class="icon-btn"><i class="fas fa-bookmark"></i><span class="badge">4</span></button>
+                <div class="profile-pic">
+                    <img src="https://via.placeholder.com/40" alt="User Profile">
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2>Job Portal</h2>
+            <p>Find your dream job and build your career</p>
+        </div>
+        
+        <div class="job-portal-tabs">
+            <button class="job-tab-btn active" data-tab="job-listings">Job Listings</button>
+            <button class="job-tab-btn" data-tab="resume-builder">Resume Builder</button>
+            <button class="job-tab-btn" data-tab="my-applications">My Applications</button>
+        </div>
+        
+        <div class="job-portal-content">
+            <div id="job-listings" class="job-tab-pane active">
+                <div class="job-search-bar">
+                    <input type="text" placeholder="Search jobs, companies, skills...">
+                    <div class="location-input">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <input type="text" placeholder="Location">
+                    </div>
+                    <div class="experience-input">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" placeholder="Experience">
+                    </div>
+                    <button class="filter-btn"><i class="fas fa-filter"></i></button>
+                </div>
+                <div class="job-listings-banner">
+                    <div>
+                        <h3>Find Your Dream Job</h3>
+                        <p>Explore opportunities from top companies</p>
+                        <div class="stats">
+                            <span>1000+ Jobs</span>
+                            <span>500+ Companies</span>
+                            <span>New Jobs Daily</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resume-builder" class="job-tab-pane">
+                <div class="resume-builder-grid">
+                    <div class="resume-main">
+                        <div class="page-header" style="margin-bottom: 0;">
+                            <h2>Resume Builder</h2>
+                            <p>Build a professional resume that stands out to employers</p>
+                        </div>
+                        <div class="resume-progress">
+                            <h4>Resume Completeness</h4>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                        <div class="resume-sections">
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-check-circle status-icon"></i>
+                                    <h4>Personal Info</h4>
+                                    <span style="font-size: 0.8em; color: var(--text-light);">Required</span>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-check-circle status-icon"></i>
+                                    <h4>Summary</h4>
+                                    <span style="font-size: 0.8em; color: var(--text-light);">Required</span>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-check-circle status-icon"></i>
+                                    <h4>Education</h4>
+                                    <span style="font-size: 0.8em; color: var(--text-light);">Required</span>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-circle status-icon" style="color: #cccccc;"></i>
+                                    <h4>Experience</h4>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-check-circle status-icon"></i>
+                                    <h4>Skills</h4>
+                                    <span style="font-size: 0.8em; color: var(--text-light);">Required</span>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-circle status-icon" style="color: #cccccc;"></i>
+                                    <h4>Projects</h4>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                            <div class="resume-section-card">
+                                <div>
+                                    <i class="fas fa-circle status-icon" style="color: #cccccc;"></i>
+                                    <h4>Certifications</h4>
+                                </div>
+                                <button class="edit-btn">Edit</button>
+                            </div>
+                        </div>
+                        <div class="resume-actions">
+                            <button class="preview-btn"><i class="fas fa-eye"></i> Preview Resume</button>
+                            <button class="download-btn"><i class="fas fa-download"></i> Download PDF</button>
+                        </div>
+                        <div class="resume-template-options">
+                            <h4>Choose Template</h4>
+                            <p style="font-size: 0.9em; color: var(--text-light);">Select a template that matches your style</p>
+                            <div class="template-grid">
+                                <div class="template-card">
+                                    <div class="template-img"></div>
+                                    <p>Modern</p>
+                                </div>
+                                <div class="template-card">
+                                    <div class="template-img"></div>
+                                    <p>Classic</p>
+                                </div>
+                                <div class="template-card">
+                                    <div class="template-img"></div>
+                                    <p>Creative</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resume-sidebar">
+                        <div class="sidebar-card">
+                            <h4>Resume Tips</h4>
+                            <ul class="resume-tips">
+                                <li>Keep it concise (1-2 pages)</li>
+                                <li>Use action verbs</li>
+                                <li>Quantify achievements</li>
+                                <li>Tailor for each job</li>
+                                <li>Proofread carefully</li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-card">
+                            <h4>Quick Actions</h4>
+                            <ul class="quick-actions-list" style="list-style: none; padding: 0;">
+                                <li><button><i class="fas fa-plus"></i> Add Experience</button></li>
+                                <li><button><i class="fas fa-plus"></i> Add Project</button></li>
+                                <li><button><i class="fas fa-plus"></i> Add Certification</button></li>
+                                <li><button><i class="fas fa-plus"></i> Add Skills</button></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="my-applications" class="job-tab-pane">
+                <div class="page-header" style="margin-bottom: 0;">
+                    <h2>My Applications</h2>
+                    <p>Track your job applications and their status</p>
+                </div>
+                <div class="applications-list">
+                    <div class="application-card">
+                        <div style="display: flex; align-items: center;">
+                            <div class="app-icon"><i class="fas fa-code"></i></div>
+                            <div class="app-info">
+                                <h4>Frontend Developer</h4>
+                                <p>TechCorp</p>
+                            </div>
+                        </div>
+                        <div class="app-status">
+                            <span class="status-tag interview">Interview Scheduled</span>
+                            <div class="date">2024-01-15</div>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                    <div class="application-card">
+                        <div style="display: flex; align-items: center;">
+                            <div class="app-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="app-info">
+                                <h4>Data Analyst</h4>
+                                <p>DataPro</p>
+                            </div>
+                        </div>
+                        <div class="app-status">
+                            <span class="status-tag review">Under Review</span>
+                            <div class="date">2024-01-10</div>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                    <div class="application-card">
+                        <div style="display: flex; align-items: center;">
+                            <div class="app-icon"><i class="fas fa-laptop-code"></i></div>
+                            <div class="app-info">
+                                <h4>Full Stack Developer</h4>
+                                <p>StartupXYZ</p>
+                            </div>
+                        </div>
+                        <div class="app-status">
+                            <span class="status-tag applied">Applied</span>
+                            <div class="date">2024-01-08</div>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                    <div class="application-card">
+                        <div style="display: flex; align-items: center;">
+                            <div class="app-icon"><i class="fas fa-dna"></i></div>
+                            <div class="app-info">
+                                <h4>Software Engineer</h4>
+                                <p>BioTech Inc.</p>
+                            </div>
+                        </div>
+                        <div class="app-status">
+                            <span class="status-tag rejected">Rejected</span>
+                            <div class="date">2024-01-05</div>
+                        </div>
+                        <button class="view-btn">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const jobTabButtons = document.querySelectorAll('.job-tab-btn');
+            const jobTabPanes = document.querySelectorAll('.job-tab-pane');
+
+            const showJobTab = (tabId) => {
+                jobTabPanes.forEach(pane => {
+                    if (pane.id === tabId) {
+                        pane.style.display = 'block';
+                    } else {
+                        pane.style.display = 'none';
+                    }
+                });
+            };
+
+            jobTabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    jobTabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    showJobTab(this.getAttribute('data-tab'));
+                });
+            });
+
+            // Set initial tab
+            showJobTab('job-listings');
+        });
+    </script>
+</body>
+</html>

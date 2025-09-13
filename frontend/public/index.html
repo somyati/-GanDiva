@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Prep Website - Get Started</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-purple: #7B61FF;
+            --light-purple: #E6E0FF;
+            --dark-purple: #5A47D4;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --text-light: #666;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+            --gradient-start: #7B61FF;
+            --gradient-end: #BA4FFF;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--card-bg);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+
+        .skip-link:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-panel h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .left-panel .badges {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .left-panel .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .left-panel .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .left-panel .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+        .left-panel .feature-item i {
+            font-size: 1.5em;
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-panel .feature-item div {
+            flex: 1;
+        }
+
+        .left-panel .feature-item h3 {
+            margin: 0 0 5px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .left-panel .feature-item p {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .login-form-container {
+            width: 400px;
+            max-width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .login-form-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .login-form-container p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .auth-toggle {
+            display: flex;
+            background-color: var(--bg-light);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 30px;
+        }
+
+        .auth-toggle button {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            background-color: transparent;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            color: var(--text-light);
+        }
+
+        .auth-toggle button.active {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            color: var(--text-dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            padding-left: 45px;
+        }
+
+        .form-group input::placeholder {
+            color: #B0B0B0;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px var(--light-purple);
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1em;
+        }
+        
+        .form-group.email i { top: calc(50% + 2px); }
+        .form-group.password i { top: calc(50% + 2px); }
+
+        .checkbox-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: var(--primary-purple);
+        }
+
+        .checkbox-group a {
+            color: var(--primary-purple);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .or-separator {
+            margin: 30px 0;
+            color: var(--text-light);
+            position: relative;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+
+        .or-separator::before { left: 0; }
+        .or-separator::after { right: 0; }
+
+        .social-login {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .social-login button {
+            flex: 1;
+            padding: 12px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .social-login button:hover {
+            background-color: var(--bg-light);
+            border-color: var(--primary-purple);
+        }
+
+        .social-login button i {
+            font-size: 1.2em;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none; /* Initially hidden */
+        }
+        .message.success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+            }
+            .left-panel {
+                padding: 30px;
+                text-align: center;
+                align-items: center;
+                width: 100%;
+                min-height: auto;
+            }
+            .left-panel h2 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+            .left-panel .badges {
+                justify-content: center;
+                margin-bottom: 30px;
+            }
+            .left-panel .feature-list {
+                width: 80%;
+            }
+            .right-panel {
+                padding: 30px;
+                width: 100%;
+            }
+            .login-form-container {
+                width: 100%;
+                max-width: 450px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .left-panel .feature-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .left-panel .feature-item i {
+                margin-bottom: 10px;
+            }
+            .social-login {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .social-login button {
+                width: 100%;
+            }
+            .login-form-container h2 {
+                font-size: 1.5em;
+            }
+            .login-form-container p {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="dashboard.html" class="skip-link">Skip Features</a>
+    <div class="container">
+        <div class="left-panel">
+            <h2>Your AI-powered companion for exam success</h2>
+            <div class="badges">
+                <span class="badge">Trusted by 50,000+ Students</span>
+                <span class="badge">99% Success Rate</span>
+            </div>
+            <ul class="feature-list">
+                <li class="feature-item">
+                    <i class="fas fa-book"></i>
+                    <div>
+                        <h3>Comprehensive Study Materials</h3>
+                        <p>Access thousands of curated resources and previous year questions</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-robot"></i>
+                    <div>
+                        <h3>AI-Powered Mock Tests</h3>
+                        <p>Practice with intelligent tests that adapt to your learning style</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <h3>Performance Analytics</h3>
+                        <p>Track your progress with detailed insights and weak area analysis</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-comments"></i>
+                    <div>
+                        <h3>Community Learning</h3>
+                        <p>Connect with fellow students and get help from experts</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-briefcase"></i>
+                    <div>
+                        <h3>Job Portal Integration</h3>
+                        <p>Build your resume and find opportunities that match your skills</p>
+                    </div>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <h3>Expert Guidance</h3>
+                        <p>Get personalized study plans and AI-powered assistance</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="right-panel">
+            <div class="login-form-container">
+                <h2>Get Started</h2>
+                <p>Join thousands of students achieving their dreams</p>
+                
+                <div class="auth-toggle">
+                    <button class="active" id="signInBtn">Sign In</button>
+                    <button id="signUpBtn">Sign Up</button>
+                </div>
+
+                <div id="messageBox" class="message" style="display: none;"></div>
+
+                <form id="signInForm">
+                    <div class="form-group email">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="emailSignIn" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group password">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="passwordSignIn" placeholder="Enter your password" required>
+                        <i class="fas fa-eye" style="right: 15px; left: auto; cursor: pointer;"></i>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign In <i class="fas fa-arrow-right"></i></button>
+                </form>
+
+                <form id="signUpForm" style="display: none;">
+                    <div class="form-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nameSignUp" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group email">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="emailSignUp" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group password">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="passwordSignUp" placeholder="Create a password" required>
+                        <i class="fas fa-eye" style="right: 15px; left: auto; cursor: pointer;"></i>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign Up <i class="fas fa-arrow-right"></i></button>
+                </form>
+
+                <div class="or-separator">Or continue with</div>
+
+                <div class="social-login">
+                    <button><i class="fab fa-google"></i> Google</button>
+                    <button><i class="fab fa-facebook-f"></i> Facebook</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const signInBtn = document.getElementById('signInBtn');
+            const signUpBtn = document.getElementById('signUpBtn');
+            const signInForm = document.getElementById('signInForm');
+            const signUpForm = document.getElementById('signUpForm');
+            const passwordEyeIcons = document.querySelectorAll('.form-group.password .fa-eye');
+            const messageBox = document.getElementById('messageBox');
+
+            function showMessage(type, text) {
+                messageBox.style.display = 'block';
+                messageBox.innerText = text;
+                messageBox.classList.remove('success', 'error');
+                messageBox.classList.add(type);
+            }
+
+            function hideMessage() {
+                messageBox.style.display = 'none';
+            }
+
+            // Function to handle signup form submission
+            signUpForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                hideMessage();
+
+                const name = document.getElementById('nameSignUp').value;
+                const email = document.getElementById('emailSignUp').value;
+                const password = document.getElementById('passwordSignUp').value;
+
+                try {
+                    const response = await fetch('/api/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showMessage('success', data.message + ' Redirecting to dashboard...');
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 2000);
+                    } else {
+                        showMessage('error', data.message || 'Signup failed.');
+                    }
+                } catch (error) {
+                    showMessage('error', 'Network error. Could not connect to the server.');
+                }
+            });
+
+            // Function to handle signin form submission
+            signInForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                hideMessage();
+
+                const email = document.getElementById('emailSignIn').value;
+                const password = document.getElementById('passwordSignIn').value;
+
+                try {
+                    const response = await fetch('/api/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }),
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showMessage('success', data.message + ' Redirecting to dashboard...');
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 2000);
+                    } else {
+                        showMessage('error', data.message || 'Login failed.');
+                    }
+                } catch (error) {
+                    showMessage('error', 'Network error. Could not connect to the server.');
+                }
+            });
+
+            // Tab switching logic
+            signInBtn.addEventListener('click', () => {
+                signInBtn.classList.add('active');
+                signUpBtn.classList.remove('active');
+                signInForm.style.display = 'block';
+                signUpForm.style.display = 'none';
+                hideMessage();
+            });
+
+            signUpBtn.addEventListener('click', () => {
+                signUpBtn.classList.add('active');
+                signInBtn.classList.remove('active');
+                signInForm.style.display = 'none';
+                signUpForm.style.display = 'block';
+                hideMessage();
+            });
+
+            // Password visibility toggle
+            passwordEyeIcons.forEach(icon => {
+                icon.addEventListener('click', () => {
+                    const passwordInput = icon.previousElementSibling;
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Prep Website - Discussion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-purple: #7B61FF;
+            --light-purple: #E6E0FF;
+            --dark-purple: #5A47D4;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
+            --text-light: #666;
+            --card-bg: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            padding: 0 20px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: var(--primary-purple);
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+            border-left: 5px solid transparent;
+        }
+
+        .nav-item a.active {
+            background: linear-gradient(to right, var(--primary-purple)10%, rgba(255,255,255,0));
+            color: var(--primary-purple);
+            border-left: 5px solid var(--primary-purple);
+        }
+
+        .nav-item a:hover:not(.active) {
+            background-color: var(--bg-light);
+            color: var(--primary-purple);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .study-streak {
+            background-color: var(--bg-light);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .study-streak h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .study-streak p {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            background-color: #E0E0E0;
+            border-radius: 5px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-purple);
+            border-radius: 5px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 20px 30px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 15px 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 8px 15px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 0.95em;
+        }
+
+        .search-bar i {
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-icons .icon-btn {
+            background-color: var(--bg-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-left: 15px;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .nav-icons .icon-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .nav-icons .icon-btn .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #FF4D4F;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7em;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            margin-left: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-icons .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Discussion Section Styles */
+        .page-header {
+            margin-bottom: 20px;
+        }
+        .page-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+        .page-header p {
+            font-size: 1em;
+            color: var(--text-light);
+        }
+
+        .discussion-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        .discussion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .discussion-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .discussion-card.answered {
+            border-left: 5px solid #28a745;
+        }
+        .discussion-card.answered .title-wrapper::before {
+            content: "Answered";
+            background-color: #E6F7EB;
+            color: #28a745;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .discussion-card .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .discussion-card .user-info .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: var(--border-color);
+            overflow: hidden;
+        }
+        .discussion-card .user-info .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .discussion-card .user-info .name {
+            font-weight: 600;
+        }
+        .discussion-card .user-info .tag {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        .discussion-card .user-info .tag.helper { background-color: #EBF4FE; color: #007bff; }
+        .discussion-card .user-info .tag.expert { background-color: #E6E0FF; color: #7B61FF; }
+        .discussion-card .user-info .tag.beginner { background-color: #F8F9FA; color: #666; border: 1px solid var(--border-color); }
+        
+        .discussion-card .question-body {
+            flex-grow: 1;
+        }
+        .discussion-card h4 {
+            margin: 0;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .discussion-card .description {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin: 5px 0;
+        }
+        .discussion-card .tags {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+        }
+        .discussion-card .tags .tag {
+            background-color: var(--bg-light);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: var(--text-light);
+        }
+        .discussion-card .status-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+        .discussion-card .status-info .time {
+            margin-bottom: 10px;
+        }
+        .discussion-card .status-info .stats {
+            display: flex;
+            gap: 15px;
+        }
+        .discussion-card .status-info .stats span {
+            display: flex;
+            align-items: center;
+        }
+        .discussion-card .status-info .stats i {
+            margin-right: 5px;
+            font-size: 1.1em;
+        }
+        
+        .discussion-card .title-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .discussion-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .discussion-sidebar .sidebar-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .discussion-sidebar .sidebar-card h4 {
+            margin: 0 0 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .contributor-list .contributor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .contributor-list .contributor-item .contributor-info {
+            display: flex;
+            align-items: center;
+        }
+        .contributor-list .contributor-item .contributor-info .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: var(--border-color);
+            overflow: hidden;
+        }
+        .contributor-list .contributor-item .contributor-info .name {
+            font-weight: 600;
+        }
+        .contributor-list .contributor-item .contributor-info .tag {
+            font-size: 0.8em;
+            margin-top: 2px;
+            color: var(--text-light);
+        }
+        .contributor-list .contributor-item .contributor-stats {
+            font-size: 0.9em;
+            text-align: right;
+        }
+        .contributor-list .contributor-item .contributor-stats span {
+            display: block;
+        }
+        .quick-help-list .help-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-purple);
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .quick-help-list .help-item i {
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+        .quick-help-list .help-item:last-child {
+            border-bottom: none;
+        }
+        .forum-activity-list p {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .forum-activity-list p span:last-child {
+            font-weight: 600;
+        }
+        .discussion-header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .discussion-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; align-items: center; }
+            .sidebar .logo, .sidebar .study-streak, .nav-item a span { display: none; }
+            .sidebar .nav-item a { justify-content: center; }
+            .sidebar .nav-item a.active { border-left: 5px solid var(--primary-purple); }
+            .main-content { margin-left: 80px; padding: 15px; }
+            .navbar .search-bar { width: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { flex-wrap: wrap; justify-content: center; }
+            .navbar .search-bar { order: 2; margin-top: 15px; width: 100%; }
+            .navbar .nav-icons { order: 1; margin-bottom: 15px; }
+            .main-content { padding: 10px; }
+            .discussion-grid { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+            .page-header .discussion-header-controls { margin-top: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar { width: 0; overflow: hidden; }
+            .main-content { margin-left: 0; }
+            .navbar .search-bar { margin: 0; border-radius: 0; }
+            body { padding-top: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">TestSage</div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a href="subjects.html"><i class="fas fa-book"></i><span>Subjects & PYQs</span></a></li>
+            <li class="nav-item"><a href="mock-exams.html"><i class="fas fa-pencil-alt"></i><span>Mock Exams</span></a></li>
+            <li class="nav-item"><a href="analytics.html"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+            <li class="nav-item"><a href="discussion.html" class="active"><i class="fas fa-comments"></i><span>Discussion</span></a></li>
+            <li class="nav-item"><a href="job-portal.html"><i class="fas fa-briefcase"></i><span>Job Portal</span></a></li>
+        </ul>
+        <div class="study-streak">
+            <h4>Study Streak</h4>
+            <p>Keep it going!</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" style="width: 70%;"></div>
+            </div>
+            <p style="margin-top: 8px;">7 days streak</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search subjects, questions, jobs...">
+            </div>
+            <div class="nav-icons">
+                <button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                <button class="icon-btn"><i class="fas fa-bookmark"></i><span class="badge">4</span></button>
+                <div class="profile-pic">
+                    <img src="https://via.placeholder.com/40" alt="User Profile">
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2>Discussion Forum</h2>
+                <p>Ask questions, share knowledge, and help fellow students</p>
+            </div>
+            <div class="discussion-header-controls">
+                <div class="subject-search" style="flex-grow: 1;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search discussions...">
+                    <select style="border: none; background-color: transparent; outline: none; margin-left: 10px;">
+                        <option>All Subjects</option>
+                        <option>Physics</option>
+                        <option>Chemistry</option>
+                        <option>Mathematics</option>
+                        <option>Biology</option>
+                    </select>
+                    <button class="filter-btn"><i class="fas fa-filter"></i></button>
+                </div>
+                <button class="dashboard-header-button" style="background-color: var(--primary-purple); color: white; padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;"><i class="fas fa-plus" style="margin-right: 8px;"></i>Ask Question</button>
+            </div>
+        </div>
+        
+        <div class="discussion-grid">
+            <div class="discussion-list">
+                <div class="discussion-card answered">
+                    <div class="question-body">
+                        <div class="title-wrapper">
+                            <h4>How to solve integration by parts?</h4>
+                        </div>
+                        <p class="description">I'm struggling with integration by parts. Can someone explain the LIATE rule?</p>
+                        <div class="user-info">
+                            <div class="profile-pic"><img src="https://via.placeholder.com/40" alt="User Avatar"></div>
+                            <span class="name">Alex Kumar</span>
+                            <span class="tag helper">Helper</span>
+                            <span style="font-size: 0.8em; color: var(--text-light); margin-left: 5px;">• 156 rep</span>
+                            <span class="tag" style="background-color: #E6E0FF; color: #7B61FF; margin-left: 10px;">Mathematics</span>
+                        </div>
+                        <div class="tags">
+                            <div class="tag">calculus</div>
+                            <div class="tag">integration</div>
+                            <div class="tag">help</div>
+                        </div>
+                    </div>
+                    <div class="status-info">
+                        <span class="time"><i class="fas fa-clock"></i> 2 hours ago</span>
+                        <div class="stats">
+                            <span><i class="fas fa-thumbs-up"></i> 25</span>
+                            <span><i class="fas fa-comment-dots"></i> 12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discussion-card">
+                    <div class="question-body">
+                        <div class="title-wrapper">
+                            <h4>Organic Chemistry Reaction Mechanisms</h4>
+                        </div>
+                        <p class="description">Need help understanding SN1 vs SN2 reactions. What are the key differences?</p>
+                        <div class="user-info">
+                            <div class="profile-pic"><img src="https://via.placeholder.com/40" alt="User Avatar"></div>
+                            <span class="name">Priya Singh</span>
+                            <span class="tag beginner">Learner</span>
+                            <span style="font-size: 0.8em; color: var(--text-light); margin-left: 5px;">• 89 rep</span>
+                            <span class="tag" style="background-color: #E6F7EB; color: #28a745; margin-left: 10px;">Chemistry</span>
+                        </div>
+                        <div class="tags">
+                            <div class="tag">organic</div>
+                            <div class="tag">mechanisms</div>
+                            <div class="tag">reactions</div>
+                        </div>
+                    </div>
+                    <div class="status-info">
+                        <span class="time"><i class="fas fa-clock"></i> 4 hours ago</span>
+                        <div class="stats">
+                            <span><i class="fas fa-thumbs-up"></i> 18</span>
+                            <span><i class="fas fa-comment-dots"></i> 8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="discussion-card answered">
+                    <div class="question-body">
+                        <div class="title-wrapper">
+                            <h4>Electric Field and Potential Difference</h4>
+                        </div>
+                        <p class="description">Can someone help me understand the relationship between electric field and potential?</p>
+                        <div class="user-info">
+                            <div class="profile-pic"><img src="https://via.placeholder.com/40" alt="User Avatar"></div>
+                            <span class="name">Rahul Sharma</span>
+                            <span class="tag expert">Expert</span>
+                            <span style="font-size: 0.8em; color: var(--text-light); margin-left: 5px;">• 234 rep</span>
+                            <span class="tag" style="background-color: #EBF4FE; color: #007bff; margin-left: 10px;">Physics</span>
+                        </div>
+                        <div class="tags">
+                            <div class="tag">electricity</div>
+                            <div class="tag">field</div>
+                            <div class="tag">potential</div>
+                        </div>
+                    </div>
+                    <div class="status-info">
+                        <span class="time"><i class="fas fa-clock"></i> 6 hours ago</span>
+                        <div class="stats">
+                            <span><i class="fas fa-thumbs-up"></i> 32</span>
+                            <span><i class="fas fa-comment-dots"></i> 15</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="discussion-card answered">
+                    <div class="question-body">
+                        <div class="title-wrapper">
+                            <h4>Photosynthesis Light and Dark Reactions</h4>
+                        </div>
+                        <p class="description">What's the difference between light-dependent and light-independent reactions?</p>
+                        <div class="user-info">
+                            <div class="profile-pic"><img src="https://via.placeholder.com/40" alt="User Avatar"></div>
+                            <span class="name">Sneha Patel</span>
+                            <span class="tag beginner">Beginner</span>
+                            <span style="font-size: 0.8em; color: var(--text-light); margin-left: 5px;">• 67 rep</span>
+                            <span class="tag" style="background-color: #E6F7EB; color: #28a745; margin-left: 10px;">Biology</span>
+                        </div>
+                        <div class="tags">
+                            <div class="tag">photosynthesis</div>
+                            <div class="tag">biology</div>
+                            <div class="tag">reactions</div>
+                        </div>
+                    </div>
+                    <div class="status-info">
+                        <span class="time"><i class="fas fa-clock"></i> 1 day ago</span>
+                        <div class="stats">
+                            <span><i class="fas fa-thumbs-up"></i> 14</span>
+                            <span><i class="fas fa-comment-dots"></i> 6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="discussion-sidebar">
+                <div class="sidebar-card">
+                    <h4>Need Quick Help?</h4>
+                    <ul class="quick-help-list" style="list-style: none; padding: 0;">
+                        <li class="help-item"><i class="fas fa-book"></i>Study Materials</li>
+                        <li class="help-item"><i class="fas fa-robot"></i>AI Chatbot</li>
+                        <li class="help-item"><i class="fas fa-user-tie"></i>Find Tutors</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4>Top Contributors</h4>
+                    <p style="font-size: 0.9em; color: var(--text-light);">Most helpful community members</p>
+                    <div class="contributor-list">
+                        <div class="contributor-item">
+                            <div class="contributor-info">
+                                <div class="profile-pic" style="border: 2px solid gold;"></div>
+                                <div>
+                                    <div class="name">Dr. Anjali</div>
+                                    <div class="tag">Moderator</div>
+                                </div>
+                            </div>
+                            <div class="contributor-stats">
+                                <span>2456 rep</span>
+                                <span>156 answers</span>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <div class="contributor-info">
+                                <div class="profile-pic" style="border: 2px solid silver;"></div>
+                                <div>
+                                    <div class="name">Prof. Kumar</div>
+                                    <div class="tag">Expert</div>
+                                </div>
+                            </div>
+                            <div class="contributor-stats">
+                                <span>1990 rep</span>
+                                <span>134 answers</span>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <div class="contributor-info">
+                                <div class="profile-pic" style="border: 2px solid #cd7f32;"></div>
+                                <div>
+                                    <div class="name">Ravi Teacher</div>
+                                    <div class="tag">Expert</div>
+                                </div>
+                            </div>
+                            <div class="contributor-stats">
+                                <span>1234 rep</span>
+                                <span>98 answers</span>
+                            </div>
+                        </div>
+                        <div class="contributor-item">
+                            <div class="contributor-info">
+                                <div class="profile-pic"></div>
+                                <div>
+                                    <div class="name">Sita Ma'am</div>
+                                    <div class="tag">Helper</div>
+                                </div>
+                            </div>
+                            <div class="contributor-stats">
+                                <span>987 rep</span>
+                                <span>76 answers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4>Forum Activity</h4>
+                    <div class="forum-activity-list">
+                        <p><span>Total Questions</span><span>1,234</span></p>
+                        <p><span>Answered Today</span><span>89</span></p>
+                        <p><span>Active Users</span><span>456</span></p>
+                        <p><span>Your Contributions</span><span>23</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
