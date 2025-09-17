@@ -46,6 +46,27 @@ node server.js
 
 http://localhost:3000
 
+🔮 Future Enhancements
+
+🤖 Full AI Integration with SigmaGPT(WORKING ON IT) for personalized study guidance.
+
+📊 Advanced analytics with ML-based weak-topic prediction.
+
+🌐 Live job portal scraping (WORKING ON IT) for career opportunities.
+
+📱 Mobile app version using React Native / Flutter.
+
+
+
+
+
+👨‍💻 Author
+
+Somya Tiwari
+B.Tech (Data Science), NIET
+📧 Contact: tiwarisomya252@gmail.com
+🔗 GitHub: https://github.com/somyati
+
 
 
 
