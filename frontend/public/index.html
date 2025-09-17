@@ -523,123 +523,127 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const signInBtn = document.getElementById('signInBtn');
-            const signUpBtn = document.getElementById('signUpBtn');
-            const signInForm = document.getElementById('signInForm');
-            const signUpForm = document.getElementById('signUpForm');
-            const passwordEyeIcons = document.querySelectorAll('.form-group.password .fa-eye');
-            const messageBox = document.getElementById('messageBox');
+    document.addEventListener('DOMContentLoaded', () => {
+        const signInBtn = document.getElementById('signInBtn');
+        const signUpBtn = document.getElementById('signUpBtn');
+        const signInForm = document.getElementById('signInForm');
+        const signUpForm = document.getElementById('signUpForm');
+        const passwordEyeIcons = document.querySelectorAll('.form-group.password .fa-eye');
+        const messageBox = document.getElementById('messageBox');
 
-            function showMessage(type, text) {
-                messageBox.style.display = 'block';
-                messageBox.innerText = text;
-                messageBox.classList.remove('success', 'error');
-                messageBox.classList.add(type);
-            }
+        function showMessage(type, text) {
+            messageBox.style.display = 'block';
+            messageBox.innerText = text;
+            messageBox.classList.remove('success', 'error');
+            messageBox.classList.add(type);
+        }
 
-            function hideMessage() {
-                messageBox.style.display = 'none';
-            }
+        function hideMessage() {
+            messageBox.style.display = 'none';
+        }
 
-            // Function to handle signup form submission
-            signUpForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                hideMessage();
+        // Function to handle signup form submission
+        signUpForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            hideMessage();
 
-                const name = document.getElementById('nameSignUp').value;
-                const email = document.getElementById('emailSignUp').value;
-                const password = document.getElementById('passwordSignUp').value;
+            const name = document.getElementById('nameSignUp').value;
+            const email = document.getElementById('emailSignUp').value;
+            const password = document.getElementById('passwordSignUp').value;
 
-                try {
-                    const response = await fetch('/api/signup', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ name, email, password }),
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        showMessage('success', data.message + ' Redirecting to dashboard...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 2000);
-                    } else {
-                        showMessage('error', data.message || 'Signup failed.');
-                    }
-                } catch (error) {
-                    showMessage('error', 'Network error. Could not connect to the server.');
-                }
-            });
-
-            // Function to handle signin form submission
-            signInForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                hideMessage();
-
-                const email = document.getElementById('emailSignIn').value;
-                const password = document.getElementById('passwordSignIn').value;
-
-                try {
-                    const response = await fetch('/api/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ email, password }),
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        showMessage('success', data.message + ' Redirecting to dashboard...');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 2000);
-                    } else {
-                        showMessage('error', data.message || 'Login failed.');
-                    }
-                } catch (error) {
-                    showMessage('error', 'Network error. Could not connect to the server.');
-                }
-            });
-
-            // Tab switching logic
-            signInBtn.addEventListener('click', () => {
-                signInBtn.classList.add('active');
-                signUpBtn.classList.remove('active');
-                signInForm.style.display = 'block';
-                signUpForm.style.display = 'none';
-                hideMessage();
-            });
-
-            signUpBtn.addEventListener('click', () => {
-                signUpBtn.classList.add('active');
-                signInBtn.classList.remove('active');
-                signInForm.style.display = 'none';
-                signUpForm.style.display = 'block';
-                hideMessage();
-            });
-
-            // Password visibility toggle
-            passwordEyeIcons.forEach(icon => {
-                icon.addEventListener('click', () => {
-                    const passwordInput = icon.previousElementSibling;
-                    if (passwordInput.type === 'password') {
-                        passwordInput.type = 'text';
-                        icon.classList.remove('fa-eye');
-                        icon.classList.add('fa-eye-slash');
-                    } else {
-                        passwordInput.type = 'password';
-                        icon.classList.remove('fa-eye-slash');
-                        icon.classList.add('fa-eye');
-                    }
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password }),
                 });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('success', data.message + ' Redirecting to dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showMessage('error', data.message || 'Signup failed.');
+                }
+            } catch (error) {
+                showMessage('error', 'Network error. Could not connect to the server.');
+            }
+        });
+
+        // Function to handle signin form submission
+        signInForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            hideMessage();
+
+            const email = document.getElementById('emailSignIn').value;
+            const password = document.getElementById('passwordSignIn').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Check for user data in the response and store it
+                    if (data.user && data.user.name) {
+                        sessionStorage.setItem('userName', data.user.name);
+                    }
+                    showMessage('success', data.message + ' Redirecting to dashboard...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showMessage('error', data.message || 'Login failed.');
+                }
+            } catch (error) {
+                showMessage('error', 'Network error. Could not connect to the server.');
+            }
+        });
+
+        // Tab switching logic
+        signInBtn.addEventListener('click', () => {
+            signInBtn.classList.add('active');
+            signUpBtn.classList.remove('active');
+            signInForm.style.display = 'block';
+            signUpForm.style.display = 'none';
+            hideMessage();
+        });
+
+        signUpBtn.addEventListener('click', () => {
+            signUpBtn.classList.add('active');
+            signInBtn.classList.remove('active');
+            signInForm.style.display = 'none';
+            signUpForm.style.display = 'block';
+            hideMessage();
+        });
+
+        // Password visibility toggle
+        passwordEyeIcons.forEach(icon => {
+            icon.addEventListener('click', () => {
+                const passwordInput = icon.previousElementSibling;
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
             });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
