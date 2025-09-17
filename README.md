@@ -31,6 +31,7 @@ Hosting → Deployable on Heroku / Vercel / Render
 ⿡ Clone the Repo
 
 git clone https://github.com/somyati/GanDiva.git
+git clone for NaradAI https://github.com/somyati/NaradAI
 cd exam-planner
 
 ⿢ Install Dependencies
