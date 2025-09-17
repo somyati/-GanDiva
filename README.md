@@ -1,5 +1,5 @@
 # -GanDiva
- A smart exam preparation and planning platform that helps students take mock tests, track performance, get personalized AI-powered study recommendations and internships/job opportunities.
+ A smart exam preparation and planning platform that helps students take mock tests, track performance, get personalized AI-powered study recommendations and internships/job opportunities. Screenshots can be accessed in frontend screenshots folder.
  🚀 Features
 
 ✅ Exam Dashboard – Track all upcoming exams in one place.
